@@ -23,8 +23,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt # 安装 requirements.txt 中定义的库
-      - name: Debug curl wx.dishu.de
-        run: curl -v https://wx.dishu.de
   
       - name: Run health check script
         env:

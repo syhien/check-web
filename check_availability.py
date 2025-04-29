@@ -53,16 +53,22 @@ for url in URLS_TO_CHECK:
             print(f"  尝试 #{attempt + 1} 检查: {url}")
             response = requests.get(url, headers=headers, timeout=timeout_seconds, allow_redirects=True)
 
-            if response.status_code < 400:
-                print(f"  检查成功: {url} - 状态码: {response.status_code}")
+            # --- 修改开始 ---
+            # 检查是否是 wx.dishu.de 并且状态码是 403
+            is_wx_dishu_de_special_case = (url == "https://wx.dishu.de" and response.status_code == 403)
+
+            # 成功条件：状态码 < 400 或者 是 wx.dishu.de 的 403 特例
+            if response.status_code < 400 or is_wx_dishu_de_special_case:
+                status_info = f"状态码: {response.status_code}"
+                if is_wx_dishu_de_special_case:
+                    status_info += " (作为特例视为成功)"
+                print(f"  检查成功: {url} - {status_info}")
                 success = True
                 break # 成功则跳出重试循环
+            # --- 修改结束 ---
             else:
                 last_error = f"状态码: {response.status_code}"
                 print(f"  检查失败: {url} - {last_error}")
-                # 对于 403 Forbidden，重试可能无效，但还是尝试一下
-                # if response.status_code == 403:
-                #     break # 如果确定 403 不会因重试改变，可以取消注释这行
 
         except requests.exceptions.Timeout:
             last_error = f"请求超时 ({timeout_seconds}秒)"
