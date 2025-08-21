@@ -12,6 +12,8 @@ URLS_TO_CHECK = [
     "https://tb.dishu.de",
     "https://nps.dishu.de",
     "https://md.dishu.de",
+    "https://tv.dishu.de",
+    "https://llm.dishu.de",
 ]
 
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
